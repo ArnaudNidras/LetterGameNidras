@@ -13,6 +13,7 @@ public class Game extends Thread{
 	private LetterPool ppool;
 	private LetterPool ipool;
 	private GUI gui;
+	private boolean isPlayerTurn;
 	
 	public Game(Dictionary dictionary, Player player, IA ia){
 		
@@ -23,6 +24,7 @@ public class Game extends Thread{
 		this.ppool = new PlayerPool();
 		this.ipool = new IAPool();
 		this.gui = new GUI(this);
+		this.isPlayerTurn = false;
 		
 		run();
 		
@@ -71,7 +73,7 @@ public class Game extends Thread{
 			cpool.addElement(player);
 			cpool.addElement(ia);
 			gui.setLogsLabel("Le joueur commence !");
-			gui.cpoolSetText(player + "\n");
+			gui.cpoolSetText(player + " ");
 			gui.cpoolAddText(ia + "");
 			playerTurn();
 			
@@ -86,7 +88,7 @@ public class Game extends Thread{
 			cpool.addElement(player);
 			cpool.addElement(ia);
 			gui.setLogsLabel("L'ordinateur commence !");
-			gui.cpoolSetText(player + "\n");
+			gui.cpoolSetText(player + " ");
 			gui.cpoolAddText(ia + "");			
 			iaTurn();
 			
@@ -97,20 +99,32 @@ public class Game extends Thread{
 	public synchronized void playerTurn(){
 		
 		try {
-			System.out.println("Wait");
+			
+			gui.setLogsLabel("A vous de jouer !");
 			wait();
+			
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
-		System.out.println("lol");
+		isPlayerTurn = false;
 		
 	}
 	
 	public void iaTurn(){
 		
+		gui.setLogsLabel("A l'ordinateur de jouer !");
+		/*try {
+			
+			sleep(1000);
+			
+		} catch (InterruptedException e) {
+			
+			e.printStackTrace();
+		}*/
 		
+		isPlayerTurn = true;
 		
 	}
 	
@@ -123,6 +137,16 @@ public class Game extends Thread{
 	public synchronized void run(){
 		
 		getStartingPlayer(player.drawLetter(), ia.drawLetter());
+		while(ppool.getNumberOfElements() < 10 && ipool.getNumberOfElements() < 10){
+			
+			cpool.addElement(player.drawLetter());
+			cpool.addElement(player.drawLetter());
+			gui.update();
+			
+			if(isPlayerTurn) playerTurn();
+			else iaTurn();
+			
+		}
 		
 	}
 

@@ -9,33 +9,54 @@ public class PlayerPool implements LetterPool<String>{
 	public PlayerPool(){
 		
 		this.pool = new ArrayList<String>();
-		System.out.println("");
 		
 	}
 
 	public int getNumberOfElements() {
+		
 		return pool.size();
 	}
 
 	public void addElement(String element) {
-		// TODO Auto-generated method stub
+		
 		pool.add(element);
 		
 	}
 
 	public void removeElement(String element) {
-		// TODO Auto-generated method stub
+		
 		pool.remove(pool.indexOf(element));
+		
 	}
 
 	public String getElement(int i) {
-		// TODO Auto-generated method stub
+		
 		return pool.get(i);
+		
 	}
 
 	public boolean makeWord(String word) {
-		// TODO Auto-generated method stub
+			
+		for(int i = 0 ; i < pool.size() ; i ++){
+				
+			if(word.contains(pool.get(i))){
+					
+				return true;
+					
+			}
+				
+		}
+			
 		return false;
+		
+	}
+
+	public boolean containsWord(String word) {
+		
+		if(pool.contains(word)) return true;
+		
+		return false;
+		
 	}
 
 }

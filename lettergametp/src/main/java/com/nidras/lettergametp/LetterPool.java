@@ -11,5 +11,7 @@ public interface LetterPool<T> {
 	public void removeElement(T element);
 	
 	public boolean makeWord(String word);
+	
+	public boolean containsWord(String word);
 
 }

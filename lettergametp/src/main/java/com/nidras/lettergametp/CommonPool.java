@@ -59,4 +59,9 @@ public class CommonPool implements LetterPool<Character>{
 		
 	}
 
+	public boolean containsWord(String word) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
