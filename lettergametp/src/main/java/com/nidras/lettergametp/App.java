@@ -1,16 +1,11 @@
 package com.nidras.lettergametp;
 
-/**
- * Hello world!
- *
- */
 public class App {
 	
     public static void main(String[] args){
     	
-        System.out.println("Hello World!");
-        final Dictionary dictionary = new Dictionary();
-        
+        final Game game = new Game(new Dictionary(), new Player(), new IA());
+       
     }
     
 }
