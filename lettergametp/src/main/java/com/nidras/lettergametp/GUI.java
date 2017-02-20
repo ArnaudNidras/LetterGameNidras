@@ -102,29 +102,33 @@ public class GUI {
             		
             		if(console.getText().startsWith("/c ")){
             			
-            			if(game.getPlays().createWordFromCommonPool(console.getText().substring(3))) /*game.wakeUp()*/;
+            			if(game.getPlays().createWordFromCommonPoolPlayer(console.getText().substring(3))) /*game.wakeUp()*/;
             			
             		}
             		
             		else if(console.getText().startsWith("/s ")){
             			
-            			if(game.getPlays().createWordFromStealing(console.getText().substring(3))) /*game.wakeUp()*/;
+            			if(game.getPlays().createWordFromStealingPlayer(console.getText().substring(3))) /*game.wakeUp()*/;
             			
             		}
             		
             		else if(console.getText().startsWith("/a ")){
             			
-            			if(game.getPlays().createWordFromAssembling(console.getText().substring(3))) /*game.wakeUp()*/;
+            			if(game.getPlays().createWordFromAssemblingPlayer(console.getText().substring(3))) /*game.wakeUp()*/;
             			
             		}
             		
             		else if(console.getText().startsWith("/l ")){
             			
-            			if(game.getPlays().createWordFromAddingLetters(console.getText().substring(3))) /*game.wakeUp()*/;
+            			if(game.getPlays().createWordFromAddingLettersPlayer(console.getText().substring(3))) /*game.wakeUp()*/;
             			
             		}
             		
-            		
+            		else if(console.getText().startsWith("/ana ")){
+            			
+            			if(game.getPlays().createWordFromAnagramPlayer(console.getText().substring(5))) /*game.wakeUp()*/;
+            			
+            		}
             		
             	}
             	else logs.setText("Entrez une commande/mot ou passez");
