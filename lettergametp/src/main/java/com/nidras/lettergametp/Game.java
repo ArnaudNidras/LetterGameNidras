@@ -15,11 +15,11 @@ public class Game extends Thread{
 	private GUI gui;
 	private boolean isPlayerTurn;
 	
-	public Game(Dictionary dictionary, Player player, IA ia){
+	public Game(){
 		
-		this.dictionary = dictionary;
-		this.player = player;
-		this.ia = ia;
+		this.dictionary = new Dictionary();
+		this.player = new Player();
+		this.ia = new IA(this);
 		this.cpool = new CommonPool();
 		this.ppool = new PlayerPool();
 		this.ipool = new IAPool();
@@ -63,6 +63,12 @@ public class Game extends Thread{
 	public LetterPool getIAPool(){
 	
 		return ipool;
+	
+	}
+	
+	public GUI getGUI(){
+		
+		return gui;
 	
 	}
 	
@@ -115,6 +121,7 @@ public class Game extends Thread{
 	public void iaTurn(){
 		
 		gui.setLogsLabel("A l'ordinateur de jouer !");
+		ia.play();
 		try {
 			
 			sleep(500);

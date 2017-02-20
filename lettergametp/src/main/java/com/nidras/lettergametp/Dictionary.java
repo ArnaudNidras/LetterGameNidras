@@ -18,6 +18,8 @@ public class Dictionary {
 		loadWords();
 		removeOccurrence();
 		
+		ArrayList<String> test = wordMaker("cannelle");
+		
 	}
 	
 	public void loadWords(){
@@ -30,32 +32,32 @@ public class Dictionary {
 			reader = new BufferedReader(new FileReader("src\\main\\dico.txt"));
 			while((line = reader.readLine()) != null){
 				
-				line.replace('à', 'a');
-				line.replace('ä', 'a');
-				line.replace('â', 'a');
-				line.replace('ã', 'a');
+				line = line.replace('à', 'a');
+				line = line.replace('ä', 'a');
+				line = line.replace('â', 'a');
+				line = line.replace('ã', 'a');
 				
-				line.replace('é', 'e');
-				line.replace('è', 'e');
-				line.replace('ë', 'e');
-				line.replace('ê', 'e');
+				line = line.replace('é', 'e');
+				line = line.replace('è', 'e');
+				line = line.replace('ë', 'e');
+				line = line.replace('ê', 'e');
 				
-				line.replace('ï', 'i');
-				line.replace('î', 'i');
-				line.replace('ì', 'i');
+				line = line.replace('ï', 'i');
+				line = line.replace('î', 'i');
+				line = line.replace('ì', 'i');
 				
-				line.replace('ö', 'o');
-				line.replace('ô', 'o');
-				line.replace('ò', 'o');
-				line.replace('õ', 'o');
+				line = line.replace('ö', 'o');
+				line = line.replace('ô', 'o');
+				line = line.replace('ò', 'o');
+				line = line.replace('õ', 'o');
 				
-				line.replace('ü', 'u');
-				line.replace('û', 'u');
-				line.replace('ù', 'u');
+				line = line.replace('ü', 'u');
+				line = line.replace('û', 'u');
+				line = line.replace('ù', 'u');
 				
-				line.replace('ç', 'c');
-				line.replace("-", "");
-				line.replace(" ", "");
+				line = line.replace('ç', 'c');
+				line = line.replace("-", "");
+				line = line.replace(" ", "");
 				
 				words.add(line);
 				
@@ -114,7 +116,7 @@ public class Dictionary {
 						
 					}
 					
-					if(ok){
+					if(ok && isThereSameAmountOfLetters(i, word)){
 						
 						temp.add(i);
 						System.out.println(i);
@@ -128,6 +130,100 @@ public class Dictionary {
 		}
 		
 		return temp;
+		
+	}
+	
+	public ArrayList<String> wordMaker(String word){
+		
+		ArrayList<String> temp = new ArrayList<String>() ;
+		
+		for(String i : words){
+			
+			if(i.length() <= word.length()){
+					
+				boolean ok = true;
+					
+				for(int j = 0 ; j < i.length() ; j ++){
+						
+					if(!word.contains(String.valueOf(i.charAt(j)))) ok = false;
+						
+				}
+					
+				if(ok && isThereSameOrMoreAmountOfLetters(word, i)){
+						
+					temp.add(i);
+					System.out.println(i);
+						
+				}
+				
+			}
+			
+		}
+		
+		return temp;
+		
+	}
+	
+	public boolean isThereSameAmountOfLetters(String a, String b){
+		
+		int[] counter = new int[26];
+		
+		for(int count = 0 ; count < 26 ; count ++) counter[count] = 0;
+		
+		for(int i = 0 ; i < a.length() ; i ++){
+			
+			counter[((int) a.charAt(i)-97)] ++;
+			
+		}
+		
+		for(int j = 0 ; j < b.length() ; j ++){
+			
+			counter[((int) b.charAt(j)-97)] --;
+			
+		}
+		
+		for(int check = 0 ; check < 26 ; check ++){
+			
+			if(counter[check] != 0) return false;
+			
+		}
+		
+		return true;
+		
+	}
+	
+	public boolean isThereSameOrMoreAmountOfLetters(String a, String b){
+		
+		int[] counter = new int[26];
+		
+		for(int count = 0 ; count < 26 ; count ++) counter[count] = 0;
+		
+		for(int i = 0 ; i < a.length() ; i ++) counter[((int) a.charAt(i)-97)] ++;
+		
+		for(int j = 0 ; j < b.length() ; j ++) counter[((int) b.charAt(j)-97)] --;
+		
+		for(int check = 0 ; check < 26 ; check ++){
+			
+			if(counter[check] < 0) return false;
+			
+		}
+		
+		return true;
+		
+	}
+	
+	public int countVowel(String word){
+		
+		int count = 0;
+		
+		for(int i = 0 ; i < word.length() ; i ++){
+			
+			if(word.charAt(i) == 'a' || word.charAt(i) == 'e' || word.charAt(i) == 'i' || word.charAt(i) == 'o'
+				|| word.charAt(i) == 'u' || word.charAt(i) == 'y') count ++; 
+			
+		}
+		
+		return count;
 		
 	}
 	
