@@ -115,14 +115,14 @@ public class Game extends Thread{
 	public void iaTurn(){
 		
 		gui.setLogsLabel("A l'ordinateur de jouer !");
-		/*try {
+		try {
 			
-			sleep(1000);
+			sleep(500);
 			
 		} catch (InterruptedException e) {
 			
 			e.printStackTrace();
-		}*/
+		}
 		
 		isPlayerTurn = true;
 		

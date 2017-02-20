@@ -9,8 +9,6 @@ public class IAPool implements LetterPool<String>{
 	public IAPool(){
 		
 		this.pool = new ArrayList<String>();
-		this.pool.add("ball");
-		this.pool.add("balle");
 		
 	}
 

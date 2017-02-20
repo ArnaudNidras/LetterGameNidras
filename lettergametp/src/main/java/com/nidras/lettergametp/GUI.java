@@ -87,11 +87,6 @@ public class GUI {
 		
 		this.game = game;
 		
-		
-		
-		
-		
-		
 		this.passButton.addActionListener(new ActionListener() {
             public synchronized void actionPerformed(ActionEvent event2) {
             	
@@ -114,6 +109,18 @@ public class GUI {
             		else if(console.getText().startsWith("/s ")){
             			
             			if(createWordFromStealing(console.getText().substring(3))) game.wakeUp();
+            			
+            		}
+            		
+            		else if(console.getText().startsWith("/a ")){
+            			
+            			if(createWordFromAssembling(console.getText().substring(3))) game.wakeUp();
+            			
+            		}
+            		
+            		else if(console.getText().startsWith("/l ")){
+            			
+            			if(createWordFromAddingLetters(console.getText().substring(3))) game.wakeUp();
             			
             		}
             		
@@ -144,7 +151,7 @@ public class GUI {
         			
     			
 				}
-				else logs.setText("Le mot a déjà été joué");
+				else logs.setText("Le mot est déjà en votre possession");
 				
 			}
 			else logs.setText("Le mot n'existe pas !");
@@ -199,6 +206,143 @@ public class GUI {
 		else logs.setText("Mauvaise syntaxe !");
 		
 		return false;
+		
+	}
+	
+	public boolean createWordFromAssembling(String word){
+		
+		int countSpace = 0;
+		boolean isThereSomethingAfterLastSpace = false;
+		String[] words = new String[3];
+		
+		words[0] = words[1] = words[2] = "";
+		
+		for(int i = 0 ; i < word.length() ; i ++){
+			
+			if(word.charAt(i) == ' ') countSpace ++;
+			if(countSpace == 2 && word.charAt(i) == ' ' && i < word.length() - 1) isThereSomethingAfterLastSpace = true;
+			if(word.charAt(i) != ' ') words[countSpace] += word.charAt(i);
+			
+		}
+		
+		if(isThereSomethingAfterLastSpace){
+			
+			if(game.getDictionary().isInDictionary(words[2])){
+				
+				if(game.getPlayerPool().containsWord(words[0]) && game.getPlayerPool().containsWord(words[1])){
+					
+					if(words[0].length() + words[1].length() == words[2].length()){
+						
+						if(isThereSameAmountOfLetters(words[0] + words[1], words[2])){
+							
+							game.getPlayerPool().addElement(words[2]);
+							game.getPlayerPool().removeElement(words[0]);
+							game.getPlayerPool().removeElement(words[1]);
+							
+							game.getCommonPool().addElement(game.getPlayer().drawLetter());
+		        			update();
+		        			
+		        			return true;
+							
+						}
+						else logs.setText("Il n'y a pas le même nombre de lettres utilisées");
+						
+					}
+					else logs.setText("L'intégralité des deux mots doit être utilisée !");
+					
+				}
+				else logs.setText("Le mot est déjà en votre possession !");
+				
+			}
+			else logs.setText("Le mot n'existe pas !");
+			
+		}
+		else logs.setText("Mauvaise syntaxe !");
+		
+		return false;
+		
+	}
+	
+	public boolean createWordFromAddingLetters(String word){
+		
+		int countSpace = 0;
+		boolean isThereSomethingAfterLastSpace = false;
+		String[] words = new String[2];
+		
+		words[0] = words[1] = "";
+		
+		for(int i = 0 ; i < word.length() ; i ++){
+			
+			if(word.charAt(i) == ' ') countSpace ++;
+			if(countSpace == 1 && word.charAt(i) == ' ' && i < word.length() - 1) isThereSomethingAfterLastSpace = true;
+			if(word.charAt(i) != ' ') words[countSpace] += word.charAt(i);
+			
+		}
+		
+		
+		if(isThereSomethingAfterLastSpace){
+			
+			if(game.getDictionary().isInDictionary(words[1])){
+				
+				if(!game.getPlayerPool().containsWord(words[1])){
+
+					String temp = words[1];
+					for(int j = 0 ; j < words[0].length() ; j ++){
+						
+						temp = temp.replace(words[0].substring(j, j+1), "");
+						
+					}
+					
+					if(game.getCommonPool().makeWord(temp)){
+						
+						game.getPlayerPool().addElement(words[1]);
+						game.getPlayerPool().removeElement(words[0]);
+	        			for(int j = 0 ; j < temp.length() ; j ++) game.getCommonPool().removeElement(temp.charAt(j));
+	        			game.getCommonPool().addElement(game.getPlayer().drawLetter());
+	        			update();
+						
+					}
+					else logs.setText("Il n'y a pas assez de lettres !");
+					
+				}
+				else logs.setText("Le mot est déjà en votre possession !");
+				
+			}
+			else logs.setText("Le mot n'existe pas !");
+			
+		}
+		else logs.setText("Mauvaise syntaxe !");
+		
+		
+		return false;
+		
+	}
+	
+	public boolean isThereSameAmountOfLetters(String a, String b){
+		
+		int[] counter = new int[26];
+		
+		for(int count = 0 ; count < 26 ; count ++) counter[count] = 0;
+		
+		for(int i = 0 ; i < a.length() ; i ++){
+			
+			counter[((int) a.charAt(i)-97)] ++;
+			
+		}
+		
+		for(int j = 0 ; j < b.length() ; j ++){
+			
+			counter[((int) b.charAt(j)-97)] --;
+			
+		}
+		
+		for(int check = 0 ; check < 26 ; check ++){
+			
+			if(counter[check] != 0) return false;
+			
+		}
+		
+		return true;
 		
 	}
 	
