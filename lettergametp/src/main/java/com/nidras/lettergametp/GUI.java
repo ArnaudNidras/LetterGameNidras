@@ -24,9 +24,9 @@ public class GUI {
 	private JPanel panel;
 	private JPanel bpanel;
 	
-	private JTextArea ppool;
-	private JTextArea cpool;
-	private JTextArea ipool;
+	private JTextArea pPool;
+	private JTextArea cPool;
+	private JTextArea iPool;
 	private JLabel logs;
 	
 	private JPanel bottomPanel;
@@ -58,24 +58,24 @@ public class GUI {
 		this.jFrame.setResizable(true);
 		this.jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		this.ppool = new JTextArea("Player Pool");
-		this.cpool = new JTextArea("Common Pool");
-		this.ipool = new JTextArea("IA Pool");
-		this.ppool.setEditable(false);
-		this.cpool.setEditable(false);
-		this.ipool.setEditable(false);
+		this.pPool = new JTextArea("Player Pool");
+		this.cPool = new JTextArea("Common Pool");
+		this.iPool = new JTextArea("IA Pool");
+		this.pPool.setEditable(false);
+		this.cPool.setEditable(false);
+		this.iPool.setEditable(false);
 		this.logs = new JLabel("Logs here");
 		
-		this.ppool.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		this.cpool.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		this.ipool.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		this.pPool.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		this.cPool.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		this.iPool.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		this.console.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
 		
-		this.ppool.setSize(100, 100);
+		this.pPool.setSize(100, 100);
 		
-		this.panel.add(ppool);
-		this.panel.add(cpool);
-		this.panel.add(ipool);
+		this.panel.add(pPool);
+		this.panel.add(cPool);
+		this.panel.add(iPool);
 		this.bottomPanel.add(passButton);
 		this.bottomPanel.add(console);
 		this.bottomPanel.add(consoleButton);
@@ -102,25 +102,25 @@ public class GUI {
             		
             		if(console.getText().startsWith("/c ")){
             			
-            			if(createWordFromCommonPool(console.getText().substring(3))) game.wakeUp();
+            			if(game.getPlays().createWordFromCommonPool(console.getText().substring(3))) /*game.wakeUp()*/;
             			
             		}
             		
             		else if(console.getText().startsWith("/s ")){
             			
-            			if(createWordFromStealing(console.getText().substring(3))) game.wakeUp();
+            			if(game.getPlays().createWordFromStealing(console.getText().substring(3))) /*game.wakeUp()*/;
             			
             		}
             		
             		else if(console.getText().startsWith("/a ")){
             			
-            			if(createWordFromAssembling(console.getText().substring(3))) game.wakeUp();
+            			if(game.getPlays().createWordFromAssembling(console.getText().substring(3))) /*game.wakeUp()*/;
             			
             		}
             		
             		else if(console.getText().startsWith("/l ")){
             			
-            			if(createWordFromAddingLetters(console.getText().substring(3))) game.wakeUp();
+            			if(game.getPlays().createWordFromAddingLetters(console.getText().substring(3))) /*game.wakeUp()*/;
             			
             		}
             		
@@ -133,253 +133,41 @@ public class GUI {
             
         });
 		
+	}
+		
+	public void pPoolAddText(String i){
+		
+		pPool.append(i);
 		
 	}
 	
-	public boolean createWordFromCommonPool(String word){
+	public void cPoolAddText(String i){
 		
-		if(game.getCommonPool().makeWord(word)){
-			
-			if(game.getDictionary().isInDictionary(word)){
-				
-				if(!game.getPlayerPool().containsWord(word)){
-			
-        			game.getPlayerPool().addElement(word);
-        			for(int i = 0 ; i < word.length() ; i ++) game.getCommonPool().removeElement(word.charAt(i));
-        			game.getCommonPool().addElement(game.getPlayer().drawLetter());
-        			update();
-        			
-    			
-				}
-				else logs.setText("Le mot est déjà en votre possession");
-				
-			}
-			else logs.setText("Le mot n'existe pas !");
-			
-		}
-		else logs.setText("Il manque des lettres !");
-		
-		return false;
-		
-	}	
-	
-	public boolean createWordFromStealing(String word){
-		
-		if(word.contains(" ") && (word.length() - word.substring(0, word.indexOf(' ')).length()) > 1){
-		
-			String beg = word.substring(0, word.indexOf(' '));
-			String end = word.substring(word.indexOf(' ') + 1);
-			System.out.println(beg + " " + end);
-			
-			if(game.getDictionary().isInDictionary(end)){
-				
-				if(!game.getPlayerPool().containsWord(end)){
-				
-					if(game.getIAPool().containsWord(beg)){
-						
-						System.out.println(end.replace(beg, ""));
-						
-						if(game.getCommonPool().makeWord(end.replace(beg, ""))){
-							
-							game.getIAPool().removeElement(beg);
-							
-							game.getPlayerPool().addElement(end);
-		        			for(int k = 0 ; k < end.replace(beg, "").length() ; k ++) game.getCommonPool().removeElement(end.replace(beg, "").charAt(k));
-		        			game.getCommonPool().addElement(game.getPlayer().drawLetter());
-		        			update();
-		        			
-		        			return true;
-							
-						}
-						else logs.setText("Il n'y a pas assez de lettres pour voler ce mot !");
-						
-					}
-					else logs.setText("Impossible de voler ce mot !");
-				
-				}
-				else logs.setText("Le mot est déjà en votre possession !");
-				
-			}
-			else logs.setText("Le mot n'existe pas !");
-		
-		}
-		else logs.setText("Mauvaise syntaxe !");
-		
-		return false;
-		
-	}
-	
-	public boolean createWordFromAssembling(String word){
-		
-		int countSpace = 0;
-		boolean isThereSomethingAfterLastSpace = false;
-		String[] words = new String[3];
-		
-		words[0] = words[1] = words[2] = "";
-		
-		for(int i = 0 ; i < word.length() ; i ++){
-			
-			if(word.charAt(i) == ' ') countSpace ++;
-			if(countSpace == 2 && word.charAt(i) == ' ' && i < word.length() - 1) isThereSomethingAfterLastSpace = true;
-			if(word.charAt(i) != ' ') words[countSpace] += word.charAt(i);
-			
-		}
-		
-		if(isThereSomethingAfterLastSpace){
-			
-			if(game.getDictionary().isInDictionary(words[2])){
-				
-				if(game.getPlayerPool().containsWord(words[0]) && game.getPlayerPool().containsWord(words[1])){
-					
-					if(words[0].length() + words[1].length() == words[2].length()){
-						
-						if(isThereSameAmountOfLetters(words[0] + words[1], words[2])){
-							
-							game.getPlayerPool().addElement(words[2]);
-							game.getPlayerPool().removeElement(words[0]);
-							game.getPlayerPool().removeElement(words[1]);
-							
-							game.getCommonPool().addElement(game.getPlayer().drawLetter());
-		        			update();
-		        			
-		        			return true;
-							
-						}
-						else logs.setText("Il n'y a pas le même nombre de lettres utilisées");
-						
-					}
-					else logs.setText("L'intégralité des deux mots doit être utilisée !");
-					
-				}
-				else logs.setText("Le mot est déjà en votre possession !");
-				
-			}
-			else logs.setText("Le mot n'existe pas !");
-			
-		}
-		else logs.setText("Mauvaise syntaxe !");
-		
-		return false;
-		
-	}
-	
-	public boolean createWordFromAddingLetters(String word){
-		
-		int countSpace = 0;
-		boolean isThereSomethingAfterLastSpace = false;
-		String[] words = new String[2];
-		
-		words[0] = words[1] = "";
-		
-		for(int i = 0 ; i < word.length() ; i ++){
-			
-			if(word.charAt(i) == ' ') countSpace ++;
-			if(countSpace == 1 && word.charAt(i) == ' ' && i < word.length() - 1) isThereSomethingAfterLastSpace = true;
-			if(word.charAt(i) != ' ') words[countSpace] += word.charAt(i);
-			
-		}
-		
-		
-		if(isThereSomethingAfterLastSpace){
-			
-			if(game.getDictionary().isInDictionary(words[1])){
-				
-				if(!game.getPlayerPool().containsWord(words[1])){
-
-					String temp = words[1];
-					for(int j = 0 ; j < words[0].length() ; j ++){
-						
-						temp = temp.replace(words[0].substring(j, j+1), "");
-						
-					}
-					
-					if(game.getCommonPool().makeWord(temp)){
-						
-						game.getPlayerPool().addElement(words[1]);
-						game.getPlayerPool().removeElement(words[0]);
-	        			for(int j = 0 ; j < temp.length() ; j ++) game.getCommonPool().removeElement(temp.charAt(j));
-	        			game.getCommonPool().addElement(game.getPlayer().drawLetter());
-	        			update();
-						
-					}
-					else logs.setText("Il n'y a pas assez de lettres !");
-					
-				}
-				else logs.setText("Le mot est déjà en votre possession !");
-				
-			}
-			else logs.setText("Le mot n'existe pas !");
-			
-		}
-		else logs.setText("Mauvaise syntaxe !");
-		
-		
-		return false;
-		
-	}
-	
-	public boolean isThereSameAmountOfLetters(String a, String b){
-		
-		int[] counter = new int[26];
-		
-		for(int count = 0 ; count < 26 ; count ++) counter[count] = 0;
-		
-		for(int i = 0 ; i < a.length() ; i ++){
-			
-			counter[((int) a.charAt(i)-97)] ++;
-			
-		}
-		
-		for(int j = 0 ; j < b.length() ; j ++){
-			
-			counter[((int) b.charAt(j)-97)] --;
-			
-		}
-		
-		for(int check = 0 ; check < 26 ; check ++){
-			
-			if(counter[check] != 0) return false;
-			
-		}
-		
-		return true;
-		
-	}
-	
-	
-	public void ppoolAddText(String i){
-		
-		ppool.append(i);
-		
-	}
-	
-	public void cpoolAddText(String i){
-		
-		cpool.append(i);
+		cPool.append(i);
 		
 	}
 
-	public void ipoolAddText(String i){
+	public void iPoolAddText(String i){
 	
-		ipool.append(i);
+		iPool.append(i);
 	
 	}
 	
-	public void ppoolSetText(String i){
+	public void pPoolSetText(String i){
 		
-		ppool.setText(i);
+		pPool.setText(i);
 		
 	}
 	
-	public void cpoolSetText(String i){
+	public void cPoolSetText(String i){
 		
-		cpool.setText(i);
+		cPool.setText(i);
 		
 	}
 
-	public void ipoolSetText(String i){
+	public void iPoolSetText(String i){
 	
-		ipool.setText(i);
+		iPool.setText(i);
 	
 	}
 	
@@ -391,29 +179,29 @@ public class GUI {
 	
 	public void update(){
 		
-		cpool.setText("");
+		cPool.setText("");
 		
 		for(int i = 0 ; i < game.getCommonPool().getNumberOfElements() ; i ++){
 			
-			if(i % 30 == 0 && i != 0) cpool.append("\n");
+			if(i % 30 == 0 && i != 0) cPool.append("\n");
 			
-			cpool.append(game.getCommonPool().getElement(i) + " ");
+			cPool.append(game.getCommonPool().getElement(i) + " ");
 			
 		}
 		
-		ppool.setText("");
+		pPool.setText("");
 		
 		for(int j = 0 ; j < game.getPlayerPool().getNumberOfElements() ; j ++){
 			
-			ppool.append(game.getPlayerPool().getElement(j) + "\n");
+			pPool.append(game.getPlayerPool().getElement(j) + "\n");
 			
 		}
 		
-		ipool.setText("");
+		iPool.setText("");
 		
 		for(int k = 0 ; k < game.getIAPool().getNumberOfElements() ; k ++){
 			
-			ipool.append(game.getIAPool().getElement(k) + "\n");
+			iPool.append(game.getIAPool().getElement(k) + "\n");
 			
 		}
 		

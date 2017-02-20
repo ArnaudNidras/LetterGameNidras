@@ -16,30 +16,51 @@ public class IA extends Player{
 		
 		String poolContent = "";
 		ArrayList<String> playableWords;
+		boolean hasPlayed = false;
 		
 		for(int i = 0 ; i < game.getCommonPool().getNumberOfElements() ; i ++) poolContent += game.getCommonPool().getElement(i);
 		
 		playableWords = game.getDictionary().wordMaker(poolContent);
 		
+		System.out.println("PoolB : " + poolContent);
+		
 		String toPlay = "";
 		
 		for(String i : playableWords){
 			
-			if(game.getDictionary().countVowel(i) > game.getDictionary().countVowel(toPlay)) toPlay = i;
+			if(game.getDictionary().countVowel(i) > game.getDictionary().countVowel(toPlay) && !game.getIAPool().containsWord(i)) toPlay = i;
 			
-			if(toPlay.length() >= 5 - game.getPlayerPool().getNumberOfElements()){
+			if(toPlay.length() >= 3 - game.getPlayerPool().getNumberOfElements()){
 				
 				game.getIAPool().addElement(toPlay);
     			for(int j = 0 ; j < toPlay.length() ; j ++) game.getCommonPool().removeElement(toPlay.charAt(j));
     			game.getCommonPool().addElement(game.getPlayer().drawLetter());
     			game.getGUI().update();
+    			hasPlayed = true;
+    			System.out.println("Played : " + toPlay);
+    			try {
+    				
+    				Thread.sleep(1000);
+    				
+    			} catch (InterruptedException e) {
+    				
+    				e.printStackTrace();
+    			}
     			break;
 				
 			}
 			
 		}
 		
-		System.out.println("toPlay : " + toPlay);
+		poolContent = "";
+		
+		for(int i = 0 ; i < game.getCommonPool().getNumberOfElements() ; i ++) poolContent += game.getCommonPool().getElement(i);
+		
+		playableWords = game.getDictionary().wordMaker(poolContent);
+		
+		System.out.println("PoolE : " + poolContent);
+		
+		if(playableWords.size() > 0 && hasPlayed) play();
 		
 	}
 

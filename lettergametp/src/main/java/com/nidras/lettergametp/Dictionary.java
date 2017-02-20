@@ -152,7 +152,6 @@ public class Dictionary {
 				if(ok && isThereSameOrMoreAmountOfLetters(word, i)){
 						
 					temp.add(i);
-					System.out.println(i);
 						
 				}
 				

@@ -27,6 +27,22 @@ public class Player {
 		
 		for(int i = 0 ; i < 26 ; i ++) allowedChar.add((char)(97+i));
 		
+		allowedChar.add('a');
+		allowedChar.add('a');
+		//allowedChar.add('a');
+		allowedChar.add('e');
+		allowedChar.add('e');
+		//allowedChar.add('e');
+		allowedChar.add('i');
+		allowedChar.add('i');
+		//allowedChar.add('i');
+		allowedChar.add('o');
+		allowedChar.add('o');
+		//allowedChar.add('o');
+		allowedChar.add('u');
+		allowedChar.add('u');
+		//allowedChar.add('u');
+		
 	}
 	
 	public Character drawLetter(){

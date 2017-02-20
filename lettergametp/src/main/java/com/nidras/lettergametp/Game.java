@@ -9,10 +9,11 @@ public class Game extends Thread{
 	private Dictionary dictionary;
 	private Player player;
 	private IA ia;
-	private LetterPool cpool;
-	private LetterPool ppool;
-	private LetterPool ipool;
+	private LetterPool cPool;
+	private LetterPool pPool;
+	private LetterPool iPool;
 	private GUI gui;
+	private Plays plays;
 	private boolean isPlayerTurn;
 	
 	public Game(){
@@ -20,10 +21,11 @@ public class Game extends Thread{
 		this.dictionary = new Dictionary();
 		this.player = new Player();
 		this.ia = new IA(this);
-		this.cpool = new CommonPool();
-		this.ppool = new PlayerPool();
-		this.ipool = new IAPool();
+		this.cPool = new CommonPool();
+		this.pPool = new PlayerPool();
+		this.iPool = new IAPool();
 		this.gui = new GUI(this);
+		this.plays = new Plays(dictionary, pPool, cPool, iPool, gui, player);
 		this.isPlayerTurn = false;
 		
 		run();
@@ -50,19 +52,19 @@ public class Game extends Thread{
 	
 	public LetterPool getCommonPool(){
 		
-		return cpool;
+		return cPool;
 		
 	}
 	
 	public LetterPool getPlayerPool(){
 		
-		return ppool;
+		return pPool;
 		
 	}
 
 	public LetterPool getIAPool(){
 	
-		return ipool;
+		return iPool;
 	
 	}
 	
@@ -72,15 +74,21 @@ public class Game extends Thread{
 	
 	}
 	
+	public Plays getPlays(){
+		
+		return plays;
+		
+	}
+	
 	public void getStartingPlayer(Character player, Character ia){
 		
 		if((int) player > (int) ia){
 			
-			cpool.addElement(player);
-			cpool.addElement(ia);
+			cPool.addElement(player);
+			cPool.addElement(ia);
 			gui.setLogsLabel("Le joueur commence !");
-			gui.cpoolSetText(player + " ");
-			gui.cpoolAddText(ia + "");
+			gui.cPoolSetText(player + " ");
+			gui.cPoolAddText(ia + "");
 			playerTurn();
 			
 		}
@@ -91,11 +99,11 @@ public class Game extends Thread{
 		}
 		else{
 			
-			cpool.addElement(player);
-			cpool.addElement(ia);
+			cPool.addElement(player);
+			cPool.addElement(ia);
 			gui.setLogsLabel("L'ordinateur commence !");
-			gui.cpoolSetText(player + " ");
-			gui.cpoolAddText(ia + "");			
+			gui.cPoolSetText(player + " ");
+			gui.cPoolAddText(ia + "");			
 			iaTurn();
 			
 		}
@@ -124,7 +132,7 @@ public class Game extends Thread{
 		ia.play();
 		try {
 			
-			sleep(500);
+			sleep(1000);
 			
 		} catch (InterruptedException e) {
 			
@@ -144,10 +152,10 @@ public class Game extends Thread{
 	public synchronized void run(){
 		
 		getStartingPlayer(player.drawLetter(), ia.drawLetter());
-		while(ppool.getNumberOfElements() < 10 && ipool.getNumberOfElements() < 10){
+		while(pPool.getNumberOfElements() < 10 && iPool.getNumberOfElements() < 10){
 			
-			cpool.addElement(player.drawLetter());
-			cpool.addElement(player.drawLetter());
+			cPool.addElement(player.drawLetter());
+			cPool.addElement(player.drawLetter());
 			gui.update();
 			
 			if(isPlayerTurn) playerTurn();
