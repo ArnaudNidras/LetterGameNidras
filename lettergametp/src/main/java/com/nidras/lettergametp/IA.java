@@ -22,8 +22,6 @@ public class IA extends Player{
 		
 		playableWords = game.getDictionary().wordMaker(poolContent);
 		
-		System.out.println("PoolB : " + poolContent);
-		
 		String toPlay = "";
 		
 		for(String i : playableWords){
@@ -37,7 +35,6 @@ public class IA extends Player{
     			game.getCommonPool().addElement(game.getPlayer().drawLetter());
     			game.getGUI().update();
     			hasPlayed = true;
-    			System.out.println("Played : " + toPlay);
     			try {
     				
     				Thread.sleep(1000);
