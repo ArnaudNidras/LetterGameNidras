@@ -64,19 +64,24 @@ public class Plays {
 				
 					if(iPool.containsWord(beg)){
 						
-						if(cPool.makeWord(end.replace(beg, ""))){
-							
-							iPool.removeElement(beg);
-							
-							pPool.addElement(end);
-		        			for(int k = 0 ; k < end.replace(beg, "").length() ; k ++) cPool.removeElement(end.replace(beg, "").charAt(k));
-		        			cPool.addElement(player.drawLetter());
-		        			gui.update();
-		        			
-		        			return true;
-							
+						if(beg.length() < end.length()){
+						
+							if(cPool.makeWord(end.replace(beg, ""))){
+								
+								iPool.removeElement(beg);
+								
+								pPool.addElement(end);
+			        			for(int k = 0 ; k < end.replace(beg, "").length() ; k ++) cPool.removeElement(end.replace(beg, "").charAt(k));
+			        			cPool.addElement(player.drawLetter());
+			        			gui.update();
+			        			
+			        			return true;
+								
+							}
+							else gui.setLogsLabel("Il n'y a pas assez de lettres pour voler ce mot !");
+						
 						}
-						else gui.setLogsLabel("Il n'y a pas assez de lettres pour voler ce mot !");
+						else gui.setLogsLabel("Il faut rajouter des lettres pour voler ce mot !");
 						
 					}
 					else gui.setLogsLabel("Impossible de voler ce mot !");
