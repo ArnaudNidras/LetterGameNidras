@@ -288,6 +288,12 @@ public class Plays {
 		
 		return false;
 		
-	}	
+	}
+	
+	public ArrayList<String> getUsedAnagrams(){
+		
+		return usedAnagrams;
+		
+	}
 
 }
