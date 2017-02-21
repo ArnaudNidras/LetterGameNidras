@@ -23,12 +23,14 @@ public class IA extends Player{
 		playableWords = game.getDictionary().wordMaker(poolContent);
 		
 		String toPlay = "";
+	
+		if(poolContent.length() == 0 || playableWords.size() == 0) return;
 		
 		for(String i : playableWords){
 			
 			if(game.getDictionary().countVowel(i) > game.getDictionary().countVowel(toPlay) && !game.getIAPool().containsWord(i)) toPlay = i;
 			
-			if(toPlay.length() >= 3 - game.getPlayerPool().getNumberOfElements()){
+			if(toPlay.length() >= 3 - game.getPlayerPool().getNumberOfElements() && toPlay.length() > 0){
 				
 				game.getIAPool().addElement(toPlay);
     			for(int j = 0 ; j < toPlay.length() ; j ++) game.getCommonPool().removeElement(toPlay.charAt(j));
@@ -54,8 +56,6 @@ public class IA extends Player{
 		for(int i = 0 ; i < game.getCommonPool().getNumberOfElements() ; i ++) poolContent += game.getCommonPool().getElement(i);
 		
 		playableWords = game.getDictionary().wordMaker(poolContent);
-		
-		System.out.println("PoolE : " + poolContent);
 		
 		if(playableWords.size() > 0 && hasPlayed) play();
 		
