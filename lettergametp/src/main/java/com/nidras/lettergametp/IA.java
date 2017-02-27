@@ -30,25 +30,23 @@ public class IA extends Player{
 			
 			if(game.getDictionary().countVowel(i) > game.getDictionary().countVowel(toPlay) && !game.getIAPool().containsWord(i)) toPlay = i;
 			
-			if(toPlay.length() >= 3 - game.getPlayerPool().getNumberOfElements() && toPlay.length() > 0){
+		}
+		if(toPlay.length() >= 3 - game.getPlayerPool().getNumberOfElements() && toPlay.length() > 0){
 				
-				game.getIAPool().addElement(toPlay);
-    			for(int j = 0 ; j < toPlay.length() ; j ++) game.getCommonPool().removeElement(toPlay.charAt(j));
-    			game.getCommonPool().addElement(game.getPlayer().drawLetter());
-    			game.getGUI().update();
-    			hasPlayed = true;
-    			try {
-    				
-    				Thread.sleep(1000);
-    				
-    			} catch (InterruptedException e) {
-    				
-    				e.printStackTrace();
-    			}
-    			break;
+			game.getIAPool().addElement(toPlay);
+			for(int j = 0 ; j < toPlay.length() ; j ++) game.getCommonPool().removeElement(toPlay.charAt(j));
+			game.getCommonPool().addElement(game.getPlayer().drawLetter());
+			game.getGUI().update();
+			hasPlayed = true;
+			try {
 				
+				Thread.sleep(1000);
+				
+			} catch (InterruptedException e) {
+				
+				e.printStackTrace();
 			}
-			
+				
 		}
 		
 		poolContent = "";
@@ -58,6 +56,7 @@ public class IA extends Player{
 		playableWords = game.getDictionary().wordMaker(poolContent);
 		
 		if(playableWords.size() > 0 && hasPlayed) play();
+		
 		
 	}
 
