@@ -1,4 +1,4 @@
-package com.nidras.lettergametp;
+package com.nidras.lettergametp.pool;
 
 import java.util.ArrayList;
 

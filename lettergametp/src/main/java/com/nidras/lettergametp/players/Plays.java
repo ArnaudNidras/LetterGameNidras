@@ -1,6 +1,10 @@
-package com.nidras.lettergametp;
+package com.nidras.lettergametp.players;
 
 import java.util.ArrayList;
+
+import com.nidras.lettergametp.Dictionary;
+import com.nidras.lettergametp.GUI;
+import com.nidras.lettergametp.pool.LetterPool;
 
 public class Plays {
 	

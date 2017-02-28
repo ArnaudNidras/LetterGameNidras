@@ -16,9 +16,7 @@ public class Dictionary {
 		
 		this.words = new ArrayList<String>();
 		loadWords();
-		removeOccurrence();
-		
-		ArrayList<String> test = wordMaker("cannelle");
+		removeOccurrence(); 
 		
 	}
 	
@@ -81,6 +79,7 @@ public class Dictionary {
 		temp.addAll(words);
 		words.clear();
 		words.addAll(temp);
+		temp.clear();
 		
 	}
 	

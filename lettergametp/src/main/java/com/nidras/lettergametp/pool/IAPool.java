@@ -1,12 +1,12 @@
-package com.nidras.lettergametp;
+package com.nidras.lettergametp.pool;
 
 import java.util.ArrayList;
 
-public class PlayerPool implements LetterPool<String>{
+public class IAPool implements LetterPool<String>{
 	
 	private ArrayList<String> pool;
 	
-	public PlayerPool(){
+	public IAPool(){
 		
 		this.pool = new ArrayList<String>();
 		
@@ -15,10 +15,11 @@ public class PlayerPool implements LetterPool<String>{
 	public int getNumberOfElements() {
 		
 		return pool.size();
+		
 	}
 
 	public void addElement(String element) {
-		
+
 		pool.add(element);
 		
 	}
@@ -36,10 +37,12 @@ public class PlayerPool implements LetterPool<String>{
 	}
 
 	public boolean makeWord(String word) {
-			
+		
 		for(int i = 0 ; i < pool.size() ; i ++){
+			
+			if(word.contains(pool.get(i)) && word.length() > pool.get(i).length()){
 				
-			if(word.contains(pool.get(i))){
+				System.out.println(word.length() + " " + pool.get(i).length());
 					
 				return true;
 					
@@ -52,7 +55,8 @@ public class PlayerPool implements LetterPool<String>{
 	}
 
 	public boolean containsWord(String word) {
-		
+
+
 		if(pool.contains(word)) return true;
 		
 		return false;

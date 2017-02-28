@@ -4,6 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+import com.nidras.lettergametp.players.IA;
+import com.nidras.lettergametp.players.Player;
+import com.nidras.lettergametp.players.Plays;
+import com.nidras.lettergametp.pool.CommonPool;
+import com.nidras.lettergametp.pool.IAPool;
+import com.nidras.lettergametp.pool.LetterPool;
+import com.nidras.lettergametp.pool.PlayerPool;
+
 public class Game extends Thread{
 	
 	private Dictionary dictionary;

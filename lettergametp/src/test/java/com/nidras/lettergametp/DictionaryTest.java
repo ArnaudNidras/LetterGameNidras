@@ -59,16 +59,47 @@ public class DictionaryTest {
 	@Test
 	public void dictionaryContentTest(){
 		
-		assertFalse("Recherche de azrt dans le dictionnaire", dico.isInDictionary("azrt") == true);
+		assertTrue("Recherche de poulet dans le dictionnaire", dico.isInDictionary("poulet"));
+		assertFalse("Recherche de azrt dans le dictionnaire", dico.isInDictionary("azrt"));
 		
 	}
 	
 	@Test
-	public void anagramResearch(){
+	public void anagramResearchTest(){
 		
-		assertTrue("Recherche de l'anagramme de olive (voile)", dico.anagramMaker("olive").size() > 0);
 		assertFalse("Recherche de l'anagremme de feu (inexistant)", dico.anagramMaker("feu").size() > 0);
+		assertTrue("Recherche de l'anagramme de olive (voile)", dico.anagramMaker("olive").contains("voile"));
 		
 	}
-
+	
+	@Test
+	public void wordMakerTest(){
+		
+		assertTrue("Création d'un mot avec efu (feu)", dico.wordMaker("efu").size() > 0);
+		
+	}
+	
+	@Test
+	public void isThereSameAmountOfLettersTest(){
+		
+		assertTrue("Vérification nombre de lettres entre azerty et ytreza", dico.isThereSameAmountOfLetters("azerty", "ytreza"));
+		assertFalse("Vérification nombre de lettres entre pale et palle (faux)", dico.isThereSameAmountOfLetters("pale", "palle"));
+		
+	}
+	
+	@Test
+	public void isThereSameOrMoreAmountOfLettersTest(){
+		
+		assertTrue("Toutes les lettres d'azerty sont elles contenues dans ytreza ? Vrai", dico.isThereSameAmountOfLetters("azerty", "ytreza"));
+		assertFalse("Toutes les lettres de pile sont elles contenues dans pales ? Faux", dico.isThereSameAmountOfLetters("pile", "pales"));
+		
+	}
+	
+	@Test
+	public void countVowelsTest(){
+		
+		assertEquals(dico.countVowel("azerty"), 3);
+		
+	}
+	
 }

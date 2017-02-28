@@ -1,6 +1,8 @@
-package com.nidras.lettergametp;
+package com.nidras.lettergametp.players;
 
 import java.util.ArrayList;
+
+import com.nidras.lettergametp.Game;
 
 public class IA extends Player{
 	
