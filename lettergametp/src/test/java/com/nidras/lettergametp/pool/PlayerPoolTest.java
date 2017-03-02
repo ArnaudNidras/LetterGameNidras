@@ -1,4 +1,4 @@
-package com.nidras.lettergametp;
+package com.nidras.lettergametp.pool;
 
 import static org.junit.Assert.*;
 
@@ -10,7 +10,7 @@ import com.nidras.lettergametp.pool.PlayerPool;
 
 public class PlayerPoolTest {
 
-	private LetterPool pPool;
+	private LetterPool<String> pPool;
 	
 	@Before
 	public void init(){

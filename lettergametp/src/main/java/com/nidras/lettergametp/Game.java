@@ -1,9 +1,5 @@
 package com.nidras.lettergametp;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-
 import com.nidras.lettergametp.players.IA;
 import com.nidras.lettergametp.players.Player;
 import com.nidras.lettergametp.players.Plays;
@@ -17,9 +13,9 @@ public class Game extends Thread{
 	private Dictionary dictionary;
 	private Player player;
 	private IA ia;
-	private LetterPool cPool;
-	private LetterPool pPool;
-	private LetterPool iPool;
+	private LetterPool<Character> cPool;
+	private LetterPool<String> pPool;
+	private LetterPool<String> iPool;
 	private GUI gui;
 	private Plays plays;
 	private boolean isPlayerTurn;
@@ -58,19 +54,19 @@ public class Game extends Thread{
 		
 	}
 	
-	public LetterPool getCommonPool(){
+	public LetterPool<Character> getCommonPool(){
 		
 		return cPool;
 		
 	}
 	
-	public LetterPool getPlayerPool(){
+	public LetterPool<String> getPlayerPool(){
 		
 		return pPool;
 		
 	}
 
-	public LetterPool getIAPool(){
+	public LetterPool<String> getIAPool(){
 	
 		return iPool;
 	
@@ -138,14 +134,6 @@ public class Game extends Thread{
 		
 		gui.setLogsLabel("A l'ordinateur de jouer !");
 		ia.play();
-		try {
-			
-			sleep(1000);
-			
-		} catch (InterruptedException e) {
-			
-			e.printStackTrace();
-		}
 		
 		isPlayerTurn = true;
 		
@@ -170,6 +158,10 @@ public class Game extends Thread{
 			else iaTurn();
 			
 		}
+		
+		if(pPool.getNumberOfElements() >= 10) gui.setLogsLabel("Le joueur gagne !!!");
+		
+		else gui.setLogsLabel("L'ordinateur gagne ... Rekt !");
 		
 	}
 

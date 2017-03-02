@@ -13,5 +13,7 @@ public interface LetterPool<T> {
 	public boolean makeWord(String word);
 	
 	public boolean containsWord(String word);
+	
+	public String concatPool();
 
 }

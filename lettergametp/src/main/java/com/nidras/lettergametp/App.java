@@ -4,7 +4,7 @@ public class App {
 	
     public static void main(String[] args){
     	
-        final Game game = new Game();
+        Game game = new Game();
        
     }
     

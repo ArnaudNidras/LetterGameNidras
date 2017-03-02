@@ -56,10 +56,23 @@ public class IAPool implements LetterPool<String>{
 
 	public boolean containsWord(String word) {
 
-
 		if(pool.contains(word)) return true;
 		
 		return false;
+		
+	}
+
+	public String concatPool() {
+		
+		String toReturn = "";
+		
+		for(String a : pool){
+			
+			toReturn += a;
+			
+		}
+		
+		return toReturn;
 		
 	}
 

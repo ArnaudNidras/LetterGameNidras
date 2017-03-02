@@ -59,4 +59,18 @@ public class PlayerPool implements LetterPool<String>{
 		
 	}
 
+	public String concatPool() {
+		
+		String toReturn = "";
+		
+		for(String a : pool){
+			
+			toReturn += a;
+			
+		}
+		
+		return toReturn;
+		
+	}
+
 }

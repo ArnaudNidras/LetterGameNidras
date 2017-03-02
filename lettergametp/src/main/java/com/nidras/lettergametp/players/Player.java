@@ -8,7 +8,7 @@ import com.nidras.lettergametp.pool.PlayerPool;
 
 public class Player {
 
-	private LetterPool playerPool;
+	private LetterPool<String> playerPool;
 	private ArrayList<Character> allowedChar;
 	
 	public Player(){
@@ -20,7 +20,7 @@ public class Player {
 		
 	}
 	 
-	public LetterPool getPlayerPool(){
+	public LetterPool<String> getPlayerPool(){
 		
 		return this.playerPool;
 		

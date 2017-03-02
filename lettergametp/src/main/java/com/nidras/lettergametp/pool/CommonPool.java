@@ -9,7 +9,6 @@ public class CommonPool implements LetterPool<Character>{
 	public CommonPool(){
 		
 		this.pool = new ArrayList<Character>();
-		System.out.println("");
 		
 	}
 
@@ -60,8 +59,43 @@ public class CommonPool implements LetterPool<Character>{
 	}
 
 	public boolean containsWord(String word) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		int[] counter = new int[26];
+		
+		for(int count = 0 ; count < 26 ; count ++) counter[count] = 0;
+		
+		for(int i = 0 ; i < pool.size() ; i ++){
+			
+			counter[((int) pool.get(i)-97)] ++;
+			
+		}
+		
+		for(int j = 0 ; j < word.length() ; j ++){
+			
+			counter[((int) word.charAt(j)-97)] --;
+			
+		}
+		
+		for(int check = 0 ; check < 26 ; check ++){
+			
+			if(counter[check] != 0) return false;
+			
+		}
+		
+		return true;
+		
+	}
+
+	public String concatPool() {
+		
+		String toReturn = "";
+		
+		for(Character i : pool){
+			
+			toReturn += i;
+		}
+		
+		return toReturn;
 	}
 
 }

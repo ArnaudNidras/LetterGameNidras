@@ -9,14 +9,14 @@ import com.nidras.lettergametp.pool.LetterPool;
 public class Plays {
 	
 	private Dictionary dictionary;
-	private LetterPool pPool;
-	private LetterPool cPool;
-	private LetterPool iPool;
+	private LetterPool<String> pPool;
+	private LetterPool<Character> cPool;
+	private LetterPool<String> iPool;
 	private GUI gui;
 	private Player player;
 	private ArrayList<String> usedAnagrams;
 	
-	public Plays(Dictionary dictionary, LetterPool pPool, LetterPool cPool, LetterPool iPool, GUI gui, Player player){
+	public Plays(Dictionary dictionary, LetterPool<String> pPool, LetterPool<Character> cPool, LetterPool<String> iPool, GUI gui, Player player){
 		
 		this.dictionary = dictionary;
 		this.pPool = pPool;
@@ -57,25 +57,37 @@ public class Plays {
 	
 	public boolean createWordFromStealingPlayer(String word){
 		
-		if(word.contains(" ") && (word.length() - word.substring(0, word.indexOf(' ')).length()) > 1){
+		int countSpace = 0;
+		boolean isThereSomethingAfterLastSpace = false;
+		String[] words = new String[2];
 		
-			String beg = word.substring(0, word.indexOf(' '));
-			String end = word.substring(word.indexOf(' ') + 1);
+		words[0] = words[1] = "";
+		
+		for(int i = 0 ; i < word.length() ; i ++){
 			
-			if(dictionary.isInDictionary(end)){
+			if(word.charAt(i) == ' ') countSpace ++;
+			if(countSpace == 1 && word.charAt(i) == ' ' && i < word.length() - 1) isThereSomethingAfterLastSpace = true;
+			if(word.charAt(i) != ' ') words[countSpace] += word.charAt(i);
+			
+		}
+		
+		
+		if(isThereSomethingAfterLastSpace){
+			
+			if(dictionary.isInDictionary(words[1])){
 				
-				if(!pPool.containsWord(end)){
+				if(!pPool.containsWord(words[0])){
 				
-					if(iPool.containsWord(beg)){
+					if(iPool.containsWord(words[0])){
 						
-						if(beg.length() < end.length()){
+						if(words[0].length() < words[1].length()){
 						
-							if(cPool.makeWord(end.replace(beg, ""))){
+							if(cPool.makeWord(words[1].replace(words[0], "")) && dictionary.isThereSameOrMoreAmountOfLetters(cPool.concatPool(), words[1].replace(words[0], ""))){
 								
-								iPool.removeElement(beg);
+								iPool.removeElement(words[0]);
 								
-								pPool.addElement(end);
-			        			for(int k = 0 ; k < end.replace(beg, "").length() ; k ++) cPool.removeElement(end.replace(beg, "").charAt(k));
+								pPool.addElement(words[1]);
+			        			for(int k = 0 ; k < words[1].replace(words[0], "").length() ; k ++) cPool.removeElement(words[1].replace(words[0], "").charAt(k));
 			        			cPool.addElement(player.drawLetter());
 			        			gui.update();
 			        			
@@ -206,30 +218,30 @@ public class Plays {
 			
 			if(dictionary.isInDictionary(words[1])){
 				
-				if(!pPool.containsWord(words[1])){
-
-					String temp = words[1];
-					for(int j = 0 ; j < words[0].length() ; j ++){
+				if(words[0].length() < words[1].length()){
+				
+					if(!pPool.containsWord(words[1])){
+	
+						String temp = words[1].replace(words[0], "");
 						
-						temp = temp.replace(words[0].substring(j, j+1), "");
+						if(cPool.makeWord(temp) && dictionary.isThereSameOrMoreAmountOfLetters(cPool.concatPool(), temp)){
+							
+							pPool.addElement(words[1]);
+							pPool.removeElement(words[0]);
+		        			for(int j = 0 ; j < temp.length() ; j ++) cPool.removeElement(temp.charAt(j));
+		        			cPool.addElement(player.drawLetter());
+		        			gui.update();
+		        			
+		        			return true;
+							
+						}
+						else gui.setLogsLabel("Il n'y a pas assez de lettres !");
 						
 					}
-					
-					if(cPool.makeWord(temp)){
-						
-						pPool.addElement(words[1]);
-						pPool.removeElement(words[0]);
-	        			for(int j = 0 ; j < temp.length() ; j ++) cPool.removeElement(temp.charAt(j));
-	        			cPool.addElement(player.drawLetter());
-	        			gui.update();
-	        			
-	        			return true;
-						
-					}
-					else gui.setLogsLabel("Il n'y a pas assez de lettres !");
-					
+					else gui.setLogsLabel("Le mot est déjà en votre possession !");
+				
 				}
-				else gui.setLogsLabel("Le mot est déjà en votre possession !");
+				else gui.setLogsLabel("Il faut rajouter des lettres pour ralonger ce mot !");
 				
 			}
 			else gui.setLogsLabel("Le mot n'existe pas !");
