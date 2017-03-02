@@ -7,39 +7,85 @@ import com.nidras.lettergametp.Game;
 public class IA extends Player{
 	
 	private Game game;
+	private String poolContent;
+	private ArrayList<String> playableWords;
 	
 	public IA(Game game){
-		
 		this.game = game;
 		
 	}
 	
 	public void play(){
 		
-		String poolContent = "";
-		ArrayList<String> playableWords;
+		poolContent = fillPoolContentFromCommonPool();
 		boolean hasPlayed = false;
-		
-		for(int i = 0 ; i < game.getCommonPool().getNumberOfElements() ; i ++) poolContent += game.getCommonPool().getElement(i);
-		
+
 		playableWords = game.getDictionary().wordMaker(poolContent);
 		
-		String toPlay = "";
+		String toPlay = getWordWithMostVowel();
 	
 		if(poolContent.length() == 0 || playableWords.size() == 0) return;
 		
-		for(String i : playableWords){
+		
+		hasPlayed = playWord(toPlay, toPlay);
+		
+		
+		
+		if(!hasPlayed) {
+			poolContent = fillPoolContentFromCommonPool();
+			hasPlayed = stealWordsFromPlayer();
+
+			poolContent = fillPoolContentFromCommonPool();
+			playableWords = game.getDictionary().wordMaker(poolContent);
+		}
+
+		if(hasPlayed) play();
+		
+	}
+	
+	private boolean stealWordsFromPlayer() {
+		String toPlay = "" ;
+		boolean hasPlayed =  false;
+		for(int i = 0 ; i < game.getPlayerPool().getNumberOfElements() ; i ++) {
 			
-			if(game.getDictionary().countVowel(i) > game.getDictionary().countVowel(toPlay) && !game.getIAPool().containsWord(i)) toPlay = i;
+			playableWords = game.getDictionary().wordMaker(poolContent + game.getPlayerPool().getElement(i).toString());
+			ownedByPlayerFilter(i);
+			toPlay = getWordWithMostVowel();
+			if(playWord(toPlay, toPlay.replace(game.getPlayerPool().getElement(i).toString(), ""))) {
+				game.getPlayerPool().removeElement(game.getPlayerPool().getElement(i).toString());
+				poolContent = fillPoolContentFromCommonPool();
+				i--;
+				hasPlayed = true;
+			}
 			
 		}
-		if(toPlay.length() >= 3 - game.getPlayerPool().getNumberOfElements() && toPlay.length() > 0){
+		return hasPlayed;
+		
+	}
+	
+	private void ownedByPlayerFilter(int playerWordIndex) {
+		
+		for(int i = 0 ; i < playableWords.size() ; i ++) {
+			
+			if(!playableWords.get(i).contains(game.getPlayerPool().getElement(playerWordIndex).toString())
+					|| playableWords.get(i).length() <= game.getPlayerPool().getElement(playerWordIndex).toString().length()) {
 				
+				playableWords.remove(i);
+				i --;
+				
+			}
+		
+		}
+		
+	}
+
+	private boolean playWord(String toPlay, String toRemove) {
+		if(toPlay.length() >= 3 - game.getPlayerPool().getNumberOfElements() && toPlay.length() > 0){
+			
 			game.getIAPool().addElement(toPlay);
-			for(int j = 0 ; j < toPlay.length() ; j ++) game.getCommonPool().removeElement(toPlay.charAt(j));
+			for(int i = 0 ; i < toRemove.length() ; i ++) game.getCommonPool().removeElement(toRemove.charAt(i));
 			game.getCommonPool().addElement(game.getPlayer().drawLetter());
 			game.getGUI().update();
-			hasPlayed = true;
 			try {
 				
 				Thread.sleep(1000);
@@ -48,82 +94,30 @@ public class IA extends Player{
 				
 				e.printStackTrace();
 			}
-				
+
+			return true;
 		}
+		else return false;
 		
-		poolContent = "";
+	}
+
+	private String fillPoolContentFromCommonPool() {
 		
+		String poolContent = "";
 		for(int i = 0 ; i < game.getCommonPool().getNumberOfElements() ; i ++) poolContent += game.getCommonPool().getElement(i);
+		return poolContent;
 		
-		playableWords = game.getDictionary().wordMaker(poolContent);
+	}
+	
+	private String getWordWithMostVowel() {
+		String toPlay = "";
 		
-		if(playableWords.size() > 0 && hasPlayed) play();
-
-
-		else {
+		for(String i : playableWords){
 			
-			for(int j = 0 ; j < game.getPlayerPool().getNumberOfElements() ; j ++) {
-				
-				poolContent = game.getPlayerPool().getElement(j).toString();
-				
-				for(int i = 0 ; i < game.getCommonPool().getNumberOfElements() ; i ++) poolContent += game.getCommonPool().getElement(i);
-				
-				playableWords = game.getDictionary().wordMaker(poolContent);
-				
-				for(int i = 0 ; i < playableWords.size() ; i ++) {
-					
-						if(!playableWords.get(i).contains(game.getPlayerPool().getElement(j).toString()) || playableWords.get(i).length() <= game.getPlayerPool().getElement(j).toString().length()) {
-						playableWords.remove(i);
-						i --;
-						
-					}
-				}
-				
-				toPlay = "";
-				
-				for(String i : playableWords){
-					
-					if(game.getDictionary().countVowel(i) > game.getDictionary().countVowel(toPlay) && !game.getIAPool().containsWord(i)) toPlay = i;
-					
-					
-				}
-				
-				if(toPlay.length() > 0) {
-
-					game.getIAPool().addElement(toPlay);
-					toPlay = toPlay.replace(game.getPlayerPool().getElement(j).toString(), "");
-					
-					for(int i = 0 ; i < toPlay.length() ; i ++) game.getCommonPool().removeElement(toPlay.charAt(i));
-					
-					game.getPlayerPool().removeElement(game.getPlayerPool().getElement(j).toString());
-					j--;
-					game.getCommonPool().addElement(game.getPlayer().drawLetter());
-					game.getGUI().update();
-					hasPlayed = true;
-					
-					try {
-						
-						Thread.sleep(1000);
-						
-					} catch (InterruptedException e) {
-						
-						e.printStackTrace();
-					}
-					
-				}				
-				
-			}	
+			if(game.getDictionary().countVowel(i) > game.getDictionary().countVowel(toPlay) && !game.getIAPool().containsWord(i)) toPlay = i;
 			
 		}
-		
-		poolContent = "";
-		
-		for(int i = 0 ; i < game.getCommonPool().getNumberOfElements() ; i ++) poolContent += game.getCommonPool().getElement(i);
-		
-		playableWords = game.getDictionary().wordMaker(poolContent);
-		
-		if(playableWords.size() > 0 && hasPlayed) play();
-		
+		return toPlay;
 	}
 
 }
