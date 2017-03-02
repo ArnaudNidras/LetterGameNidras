@@ -18,8 +18,10 @@ public class GUI {
 	private JFrame jFrame;
 	private BoxLayout layout;
 	private BorderLayout blayout;
+	private BoxLayout tlayout;
 	private JPanel panel;
 	private JPanel bpanel;
+	private JPanel tpanel;
 	
 	private JTextArea pPool;
 	private JTextArea cPool;
@@ -32,6 +34,8 @@ public class GUI {
 	private JButton passButton;
 	private JTextArea console;
 	private JButton consoleButton;
+	
+	private JButton gameModeButton;
 	
 	private Game game;
 	
@@ -47,17 +51,21 @@ public class GUI {
 		this.bottomPanel = new JPanel();
 		this.bottomLayout = new BoxLayout(bottomPanel, BoxLayout.X_AXIS);
 		this.bottomPanel.setLayout(bottomLayout);
+		this.tpanel = new JPanel();
+		this.tlayout = new BoxLayout(tpanel, BoxLayout.X_AXIS);
+		this.tpanel.setLayout(tlayout);
 		this.passButton = new JButton("Passer");
 		this.console = new JTextArea();
 		this.consoleButton = new JButton("OK");
+		this.gameModeButton = new JButton("Play against player");
 		
 		this.jFrame.setSize(600, 500);
 		this.jFrame.setResizable(true);
 		this.jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		this.pPool = new JTextArea("Player Pool");
+		this.pPool = new JTextArea("Player 1 Pool");
 		this.cPool = new JTextArea("Common Pool");
-		this.iPool = new JTextArea("IA Pool");
+		this.iPool = new JTextArea("IA Pool / Player 2 Pool");
 		this.pPool.setEditable(false);
 		this.cPool.setEditable(false);
 		this.iPool.setEditable(false);
@@ -76,18 +84,23 @@ public class GUI {
 		this.bottomPanel.add(passButton);
 		this.bottomPanel.add(console);
 		this.bottomPanel.add(consoleButton);
+		this.tpanel.add(gameModeButton);
+		this.tpanel.add(logs);
 		this.bpanel.add(bottomPanel, BorderLayout.SOUTH);
-		this.bpanel.add(logs, BorderLayout.NORTH);
+		this.bpanel.add(tpanel, BorderLayout.NORTH);
 		this.bpanel.add(panel, BorderLayout.CENTER);
 		this.jFrame.add(bpanel);
 		this.jFrame.setVisible(true);
+		
+		if(game.getPVP()) gameModeButton.setText("Play against IA");
+		else gameModeButton.setText("Play against Player");
 		
 		this.game = game;
 		
 		this.passButton.addActionListener(new ActionListener() {
             public synchronized void actionPerformed(ActionEvent event2) {
             	
-            	game.wakeUp();
+            	game.wakeUp(false);
             	
             }
         });
@@ -99,31 +112,36 @@ public class GUI {
             		
             		if(console.getText().startsWith("/c ")){
             			
-            			if(game.getPlays().createWordFromCommonPoolPlayer(console.getText().substring(3))) /*game.wakeUp()*/;
+            			if(!game.getPVP()) game.getPlays().createWordFromCommonPoolPlayerIA(console.getText().substring(3));
+            			else game.getPlays().createWordFromCommonPoolPlayerPVP(console.getText().substring(3), game.getIsPlayer1Turn());
             			
             		}
             		
             		else if(console.getText().startsWith("/s ")){
             			
-            			if(game.getPlays().createWordFromStealingPlayer(console.getText().substring(3))) /*game.wakeUp()*/;
+            			if(!game.getPVP()) game.getPlays().createWordFromStealingPlayerIA(console.getText().substring(3));
+            			else game.getPlays().createWordFromStealingPlayerPVP(console.getText().substring(3), game.getIsPlayer1Turn());
             			
             		}
             		
             		else if(console.getText().startsWith("/a ")){
             			
-            			if(game.getPlays().createWordFromAssemblingPlayer(console.getText().substring(3))) /*game.wakeUp()*/;
+            			if(!game.getPVP()) game.getPlays().createWordFromAssemblingPlayerIA(console.getText().substring(3));
+            			else game.getPlays().createWordFromAssemblingPlayerPVP(console.getText().substring(3), game.getIsPlayer1Turn());
             			
             		}
             		
             		else if(console.getText().startsWith("/l ")){
             			
-            			if(game.getPlays().createWordFromAddingLettersPlayer(console.getText().substring(3))) /*game.wakeUp()*/;
+            			if(!game.getPVP()) game.getPlays().createWordFromAddingLettersPlayerIA(console.getText().substring(3));
+            			else game.getPlays().createWordFromAddingLettersPlayerPVP(console.getText().substring(3), game.getIsPlayer1Turn());
             			
             		}
             		
             		else if(console.getText().startsWith("/ana ")){
             			
-            			if(game.getPlays().createWordFromAnagramPlayer(console.getText().substring(5))) /*game.wakeUp()*/;
+            			if(!game.getPVP()) game.getPlays().createWordFromAnagramPlayerIA(console.getText().substring(5));
+            			else game.getPlays().createWordFromAnagramPlayerPVP(console.getText().substring(5), game.getIsPlayer1Turn());
             			
             		}
             		
@@ -133,6 +151,24 @@ public class GUI {
             }
             
         });
+		
+		this.gameModeButton.addActionListener(new ActionListener() {
+	        public synchronized void actionPerformed(ActionEvent event2) {
+	        	
+	        	if(game.getPVP()){
+	        		
+	        		game.wakeUp(true);
+	        		game.resetGame(false);
+	        		
+	        	}
+	        	else{
+	        		game.wakeUp(true);
+	        		game.resetGame(true);
+	        		
+	        	}
+	        	
+	        }
+	    });
 		
 	}
 		
@@ -200,13 +236,29 @@ public class GUI {
 		
 		iPool.setText("");
 		
-		for(int k = 0 ; k < game.getIAPool().getNumberOfElements() ; k ++){
+		if(!game.getPVP()){
+		
+			for(int k = 0 ; k < game.getIAPool().getNumberOfElements() ; k ++){
+				
+				iPool.append(game.getIAPool().getElement(k) + "\n");
+				
+			}
+		
+		}
+		else{
 			
-			iPool.append(game.getIAPool().getElement(k) + "\n");
+			for(int k = 0 ; k < game.getPlayer2Pool().getNumberOfElements() ; k ++){
+				
+				iPool.append(game.getPlayer2Pool().getElement(k) + "\n");
+				
+			}
 			
 		}
 		
 		console.setText("");
+		
+		if(game.getPVP()) gameModeButton.setText("Play against IA");
+		else gameModeButton.setText("Play against Player");
 		
 	}
 	

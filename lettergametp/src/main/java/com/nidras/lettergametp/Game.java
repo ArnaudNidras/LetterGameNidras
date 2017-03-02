@@ -15,22 +15,26 @@ public class Game extends Thread{
 	private IA ia;
 	private LetterPool<Character> cPool;
 	private LetterPool<String> pPool;
+	private LetterPool<String> pPool2;
 	private LetterPool<String> iPool;
 	private GUI gui;
 	private Plays plays;
-	private boolean isPlayerTurn;
+	private boolean isPlayer1Turn;
+	private boolean pvp;
 	
-	public Game(){
+	public Game(boolean pvp){
 		
 		this.dictionary = new Dictionary();
 		this.player = new Player();
 		this.ia = new IA(this);
 		this.cPool = new CommonPool();
 		this.pPool = new PlayerPool();
+		this.pPool2 = new PlayerPool();
 		this.iPool = new IAPool();
 		this.gui = new GUI(this);
-		this.plays = new Plays(dictionary, pPool, cPool, iPool, gui, player);
-		this.isPlayerTurn = false;
+		this.plays = new Plays(dictionary, pPool, pPool2, cPool, iPool, gui, player);
+		this.isPlayer1Turn = false;
+		this.pvp = pvp;
 		
 		run();
 		
@@ -65,6 +69,12 @@ public class Game extends Thread{
 		return pPool;
 		
 	}
+	
+	public LetterPool<String> getPlayer2Pool(){
+		
+		return pPool2;
+		
+	}
 
 	public LetterPool<String> getIAPool(){
 	
@@ -84,7 +94,19 @@ public class Game extends Thread{
 		
 	}
 	
-	public void getStartingPlayer(Character player, Character ia){
+	public boolean getPVP(){
+		
+		return pvp;
+		
+	}
+	
+	public boolean getIsPlayer1Turn(){
+		
+		return isPlayer1Turn;
+		
+	}
+	
+	public void getStartingPlayerIA(Character player, Character ia){
 		
 		if((int) player > (int) ia){
 			
@@ -93,12 +115,12 @@ public class Game extends Thread{
 			gui.setLogsLabel("Le joueur commence !");
 			gui.cPoolSetText(player + " ");
 			gui.cPoolAddText(ia + "");
-			playerTurn();
+			player1Turn();
 			
 		}
 		else if((int) player == (int) ia){
 			
-			getStartingPlayer(this.player.drawLetter(), this.ia.drawLetter());
+			getStartingPlayerIA(this.player.drawLetter(), this.ia.drawLetter());
 			
 		}
 		else{
@@ -114,11 +136,41 @@ public class Game extends Thread{
 		
 	}
 	
-	public synchronized void playerTurn(){
+	public void getStartingPlayerPVP(Character player, Character player2){
+		
+		if((int) player > (int) player2){
+			
+			cPool.addElement(player);
+			cPool.addElement(player2);
+			gui.setLogsLabel("Le joueur 1 commence !");
+			gui.cPoolSetText(player + " ");
+			gui.cPoolAddText(player2 + "");
+			player1Turn();
+			
+		}
+		else if((int) player == (int) player2){
+			
+			getStartingPlayerPVP(this.player.drawLetter(), this.player.drawLetter());
+			
+		}
+		else{
+			
+			cPool.addElement(player);
+			cPool.addElement(player2);
+			gui.setLogsLabel("Le joueur 2 commence !");
+			gui.cPoolSetText(player + " ");
+			gui.cPoolAddText(player2 + "");			
+			player2Turn();
+			
+		}
+		
+	}
+	
+	public synchronized void player1Turn(){
 		
 		try {
 			
-			gui.setLogsLabel("A vous de jouer !");
+			gui.setLogsLabel("Au joueur 1 de jouer !");
 			wait();
 			
 		} catch (InterruptedException e) {
@@ -126,7 +178,23 @@ public class Game extends Thread{
 			e.printStackTrace();
 		}
 		
-		isPlayerTurn = false;
+		isPlayer1Turn = false;
+		
+	}
+	
+	public synchronized void player2Turn(){
+		
+		try {
+			
+			gui.setLogsLabel("Au joueur 2 de jouer !");
+			wait();
+			
+		} catch (InterruptedException e) {
+			
+			e.printStackTrace();
+		}
+		
+		isPlayer1Turn = true;
 		
 	}
 	
@@ -135,33 +203,63 @@ public class Game extends Thread{
 		gui.setLogsLabel("A l'ordinateur de jouer !");
 		ia.play();
 		
-		isPlayerTurn = true;
+		isPlayer1Turn = true;
 		
 	}
 	
-	public synchronized void wakeUp(){
+	public synchronized void wakeUp(boolean reset){
 		
 		this.notify();
+		
+		if(reset) resetGame(!pvp);
 		
 	}
 	
 	public synchronized void run(){
 		
-		getStartingPlayer(player.drawLetter(), ia.drawLetter());
+		if(!pvp) getStartingPlayerIA(player.drawLetter(), ia.drawLetter());
+		else getStartingPlayerPVP(player.drawLetter(), player.drawLetter());
 		while(pPool.getNumberOfElements() < 10 && iPool.getNumberOfElements() < 10){
 			
 			cPool.addElement(player.drawLetter());
 			cPool.addElement(player.drawLetter());
 			gui.update();
 			
-			if(isPlayerTurn) playerTurn();
-			else iaTurn();
+			if(!pvp){
+			
+				if(isPlayer1Turn) player1Turn();
+				else iaTurn();
+			
+			}
+			else{
+				
+				if(isPlayer1Turn) player1Turn();
+				else player2Turn();
+				
+			}
 			
 		}
 		
-		if(pPool.getNumberOfElements() >= 10) gui.setLogsLabel("Le joueur gagne !!!");
+		if(pPool.getNumberOfElements() >= 10) gui.setLogsLabel("Le joueur 1 gagne !!!");
+		
+		else if(pPool2.getNumberOfElements() >= 10) gui.setLogsLabel("Le joueur 2 gagne !!!");
 		
 		else gui.setLogsLabel("L'ordinateur gagne ... Rekt !");
+		
+	}
+	
+	public void resetGame(boolean pvp){
+		
+		dictionary = new Dictionary();
+		player = new Player();
+		ia = new IA(this);
+		cPool = new CommonPool();
+		pPool = new PlayerPool();
+		pPool2 = new PlayerPool();
+		iPool = new IAPool();
+		plays = new Plays(dictionary, pPool, pPool2, cPool, iPool, gui, player);
+		isPlayer1Turn = false;
+		this.pvp = pvp;
 		
 	}
 

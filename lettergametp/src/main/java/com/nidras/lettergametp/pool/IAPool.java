@@ -41,8 +41,6 @@ public class IAPool implements LetterPool<String>{
 		for(int i = 0 ; i < pool.size() ; i ++){
 			
 			if(word.contains(pool.get(i)) && word.length() > pool.get(i).length()){
-				
-				System.out.println(word.length() + " " + pool.get(i).length());
 					
 				return true;
 					
