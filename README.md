@@ -75,3 +75,7 @@ Ce package va contenir une interface et ses implémentations permettant de gére
   - CommonPool : Première implémentation de LetterPool, CommonPool régit un pool composé de lettres accessibles aux deux joueurs. Les méthodes détaillées ci-dessus sont adaptées au type Character et permettent d'interagir avec le pool tout en sécurité.
   - IAPool : IAPool n'est autre que le pool de l'intelligence artificielle, contenant des mots (String) et proposant diverses méthodes permettant de vérifier l'existence d'un mot au sein de la zone de jeu de l'IA ou encore de voir s'il existe un mot dans le pool qui pourrait être contenu par un mot mis en paramètre (utile pour les commandes /l par exemple).
   - PlayerPool : Le fonctionnement de la classe PlayerPool est identique à celui de l'IAPool sauf quelques différences minimes engendrées par le fonctionnement général du code (fonctionnalités plus précises).
+
+## Observations
+
+Le code ne compte aucun bug et répond à toutes les problèmatiques posées. Nous avons atteint un code coverage d'environ 62% par le fait que certaines méthodes ne pouvaient être testées comme les actions de l'intelligence artificielle de part le fait qu'il faut fournir au test certains objets dont Game qui se met en pause et empêche l'exécution des tests ou bien la GUI qui correspond à un grand pourcentage des lignes de code et qui n'a pas d'intérêt premier à être testée. Cependant, toutes les autres méthodes (autres que getters/setters) sont analysées et testées.
