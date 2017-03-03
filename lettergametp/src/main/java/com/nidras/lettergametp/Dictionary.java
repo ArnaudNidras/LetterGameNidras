@@ -27,7 +27,7 @@ public class Dictionary {
 		
 		try {
 			
-			reader = new BufferedReader(new FileReader("src\\main\\dico.txt"));
+			reader = new BufferedReader(new FileReader("src/main/dico.txt"));
 			while((line = reader.readLine()) != null){
 				
 				line = line.replace('à', 'a');

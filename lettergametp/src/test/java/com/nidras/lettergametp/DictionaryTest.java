@@ -31,7 +31,7 @@ public class DictionaryTest {
 		String line;
 		try {
 			
-			reader = new BufferedReader(new FileReader("src\\main\\dico.txt"));
+			reader = new BufferedReader(new FileReader("src/test/dico.txt"));
 			line = reader.readLine();
 			assertEquals("a", line);
 			
