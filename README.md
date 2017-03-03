@@ -30,9 +30,7 @@ de jouer (voir liste plus bas). Le dernier bouton ("ok"), sert à envoyer la com
 Les joueurs doivent contrôler 10 mots pour gagner. Bien sûr, il y a différentes manières de gagner (enfin si notre IA vous le permet ;) ). 
 Dans le paragraphe suivant, nous détaillerons les différentes manières de gagner des mots et de se protéger.
 
-**/!\** Il est important de noter que les petits ralentissements lors d'une partie contre l'IA ne sont pas liés à des problèmes d'optimisation
-mais bien volontaires. En effet, notre IA étant assez puissante, nous avons décidé de marquer de courtes pauses entre chacun de ses mouvements
-afin de permettre au joueur de bien comprendre comment elle a joué (et pour éviter les accusations de tricherie).
+**/!\ Il est important de noter que les petits ralentissements lors d'une partie contre l'IA ne sont pas liés à des problèmes d'optimisation mais bien volontaires. En effet, notre IA étant assez puissante, nous avons décidé de marquer de courtes pauses entre chacun de ses mouvements afin de permettre au joueur de bien comprendre comment elle a joué (et pour éviter les accusations de tricherie).**
 
 ## Les différentes commandes
 
