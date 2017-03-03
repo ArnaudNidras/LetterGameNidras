@@ -56,3 +56,22 @@ Exemple : /l parle parlement -> Ajoute les lettres 'ment' en provenance du pool 
 Cette commande a pour but de voler ou modifier un mot afin d'en faire un anagramme. Il faudra choisir entre "MOI" qui précise que le
 joueur change un de ses mots en son anagramme ou "ADV" qui permet de voler un mot adverse en utilisant son anagramme. Cependant chaque anagramme ne peut être créé qu'une seule et unique fois.
 Exemple : /ana ADV olive voile -> Vole le mot olive au joueur adverse et ajoute le mot voile au joueur.
+
+## Les différents packages et classes
+
+- **com.nidras.lettergame** :
+   Ce package contient les principales classes composant le coeur du programme. Celles-ci ont pour principal rôle de poser les    fondations du jeu.
+
+  - App : Classe principale ayant pour unique but de créer l'instance du jeu (classe Game).
+  - Dictionary : Cette classe gère tout ce qui est en relation avec le dictionnaire et le traitement de mots et chaînes de caractères diverses et variées. Cette classe commence par importer le dictionnaire, traiter chaque mot afin d'enlever tous les charactères différents des 26 lettres de l'alphabet de base (sans accents, tirets, espaces, ...) et retirer les occurences d'un même mot générées à cause du traitement. Par la suite, cette classe dispose d'un grand nombre de méthodes ayant pour but de chercher tous les anagrammes d'un mot, vérifier que deux mots ont le même nombre de lettres, vérifier qu'un mot appartienne au dictionnaire, compter le nombre de voyelles (pour l'IA), ...
+  - GUI (Graphic User Interface) : Classe commune à de nombreux programmes, ayant pour objectif de proposer une interface graphique à l'utilisateur et de relier chaque composant graphique (bouton, champ de texte, ...) à une fonctionnalité ou une méthode d'une autre classe.
+  - Game : Cette classe est la classe principale du jeu, elle crée les différents objets, décide quel joueur pourra commencer le premier, gère le tour des différents joueurs, permet de recommencer la partie, vérifie que la partie n'est pas terminée, etc ... Par ailleurs, les fonctions des tours des joueurs mettent "le code en pause" jusqu'à que le joueur passe son tour via la classe GUI (qui réveille l'objet Game).
+- **com.nidras.lettergame.players**
+  - IA :
+  - Player :
+  - Plays :
+- **com.nidras.lettergame.pool**
+  - CommonPool :
+  - IAPool :
+  - LetterPool :
+  - PlayerPool :
