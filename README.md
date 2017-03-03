@@ -35,3 +35,24 @@ mais bien volontaires. En effet, notre IA étant assez puissante, nous avons dé
 afin de permettre au joueur de bien comprendre comment elle a joué (et pour éviter les accusations de tricherie).
 
 ## Les différentes commandes
+
+- **/c motACreer** :
+Permet de créer un mot grâce aux lettres du pool commun.
+Exemple : /c voiture -> Ajoute "voiture" à la liste de mots du joueur.
+
+- **/s motAVoler motResultant** :
+Permet de voler un mot à l'adversaire en ajoutant une ou plusieurs lettres provenant du pool commun.
+Exemple : /s voiture voitures -> Vole le mot "voiture" à l'adversaire en prélevant un 's' dans le pool commun puis ajoute la concaténation dans la liste de mots du joueur.
+
+- **/a motA motB motAB** :
+Concatène deux mot du pool du joueur dans le but d'en créer un nouveau.
+Exemple : /a garde manger gardemanger -> Combine "garde" et "manger" pour créer le mot "gardemanger".
+
+- **/l motARalonger motResultant** :
+Ajoute des lettres du pool commun à un mot du pool du joueur pour changer celui-ci en un nouveau nom plus long.
+Exemple : /l parle parlement -> Ajoute les lettres 'ment' en provenance du pool commun pour changer le mot "parle" en "parlement".
+
+- **/ana ADV/MOI motDOrigine anagramme** :
+Cette commande a pour but de voler ou modifier un mot afin d'en faire un anagramme. Il faudra choisir entre "MOI" qui précise que le
+joueur change un de ses mots en son anagramme ou "ADV" qui permet de voler un mot adverse en utilisant son anagramme. Cependant chaque anagramme ne peut être créé qu'une seule et unique fois.
+Exemple : /ana ADV olive voile -> Vole le mot olive au joueur adverse et ajoute le mot voile au joueur.
