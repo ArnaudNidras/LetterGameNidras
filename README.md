@@ -67,11 +67,13 @@ Exemple : /ana ADV olive voile -> Vole le mot olive au joueur adverse et ajoute 
   - GUI (Graphic User Interface) : Classe commune à de nombreux programmes, ayant pour objectif de proposer une interface graphique à l'utilisateur et de relier chaque composant graphique (bouton, champ de texte, ...) à une fonctionnalité ou une méthode d'une autre classe.
   - Game : Cette classe est la classe principale du jeu, elle crée les différents objets, décide quel joueur pourra commencer le premier, gère le tour des différents joueurs, permet de recommencer la partie, vérifie que la partie n'est pas terminée, etc ... Par ailleurs, les fonctions des tours des joueurs mettent "le code en pause" jusqu'à que le joueur passe son tour via la classe GUI (qui réveille l'objet Game).
 - **com.nidras.lettergame.players**
-  - IA :
-  - Player :
-  - Plays :
+   Ce second package est pourvu de classes gérant les différentes actions des joueurs et leurs caractéristiques.
+  - IA : La première classe de ce package gère l'intelligence artificielle dans son intégralité. Elle contient des méthodes ayant uniquement pour but de proposer différentes actions de jeu possibles à l'IA. L'IA va commencer par créer le plus de mots possibles à partir des différentes lettres de pool commun suivant un paramètre l'autorisant à jouer des mots de plus en plus courts en favorisant ceux possédant le plus de voyelles possible afin d'handicaper le joueur. Par la suite, l'intelligence artificielle va voler le plus de mots possible aux joueur (équivalent commande /s) dans le but de gagner le plus de mots possible. Une extension aurait été de poursuivre en volant des mots via des anagrammes et en vérifiant s'il ne peut pas recréer de nouveaux mots (commande /c) car ses actions ont générées des lettres dans le pool commun. Nous avons considéré ce choix comme "anti-fun" car le joueur n'aurait aucune chance de gagner contre l'IA.
+  - Player : Cette classe a pour objectif de représenter l'implémentation d'un joueur.
+  - Plays : Plays contient toutes les méthodes permettant d'appliquer les commandes de jeu dans les deux modes de jeu différents.
 - **com.nidras.lettergame.pool**
-  - CommonPool :
-  - IAPool :
-  - LetterPool :
-  - PlayerPool :
+Ce package va contenir une interface et ses implémentations permettant de gérer le fonctionnement des différents pools de mots et lettres.
+  - LetterPool : Cette interface va servir de modèle aux différentes classes. Elle contient des méthodes permettant d'interagir avec les listes de mots et lettres tout en les sécurisant (principe d'encapsulation). Par ailleurs, cette interface imposera aussi des méthodes dont le rôle sera de concatener le contenu du pool, vérifier qu'un mot contient un mot d'un pool ou bien l'inverse.
+  - CommonPool : Première implémentation de LetterPool, CommonPool régit un pool composé de lettres accessibles aux deux joueurs. Les méthodes détaillées ci-dessus sont adaptées au type Character et permettent d'interagir avec le pool tout en sécurité.
+  - IAPool : IAPool n'est autre que le pool de l'intelligence artificielle, contenant des mots (String) et proposant diverses méthodes permettant de vérifier l'existence d'un mot au sein de la zone de jeu de l'IA ou encore de voir s'il existe un mot dans le pool qui pourrait être contenu par un mot mis en paramètre (utile pour les commandes /l par exemple).
+  - PlayerPool : Le fonctionnement de la classe PlayerPool est identique à celui de l'IAPool sauf quelques différences minimes engendrées par le fonctionnement général du code (fonctionnalités plus précises).
