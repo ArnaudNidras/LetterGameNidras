@@ -54,9 +54,7 @@ public class IAPool implements LetterPool<String>{
 
 	public boolean containsWord(String word) {
 
-		if(pool.contains(word)) return true;
-		
-		return false;
+		return pool.contains(word);
 		
 	}
 

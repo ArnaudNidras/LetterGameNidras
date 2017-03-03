@@ -145,6 +145,8 @@ public class GUI {
             			
             		}
             		
+            		update();
+            		
             	}
             	else logs.setText("Entrez une commande/mot ou passez");
             	

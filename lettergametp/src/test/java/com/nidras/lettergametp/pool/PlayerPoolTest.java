@@ -24,8 +24,32 @@ public class PlayerPoolTest {
 		
 		pPool.addElement("azer");
 		
-		assertTrue("Est-ce que le mot azerty contient un mot du pool ?  Vrai", pPool.makeWord("azer"));
-		assertFalse("Est-ce que le mot poulet contient un mot du pool ? Faux", pPool.makeWord("poulet"));
+		assertTrue("Est-ce que le mot azerty contient un mot du pool joueur ?  Vrai", pPool.makeWord("azerty"));
+		assertFalse("Est-ce que le mot poulet contient un mot du pool joueur ? Faux", pPool.makeWord("poulet"));
+		
+		pPool.removeElement("azer");
+		
+	}
+	
+	@Test
+	public void containsWord(){
+		
+		pPool.addElement("azer");
+		
+		assertTrue("Le pool du joueur contient-il le mot azer ? Vrai", pPool.containsWord("azer"));
+		
+		pPool.removeElement("azer");
+		
+	}
+	
+	@Test
+	public void concatPoolTest(){
+		
+		pPool.addElement("azer");
+		pPool.addElement("ty");
+		
+		assertEquals("Est-ce que la concaténation des mots (azer,ty) du pool donne azerty ?  Vrai", pPool.concatPool(), "azerty");
+		assertNotEquals("Est-ce que la concaténation des mots du pool(azer,ty) donne azairti ?  Faux", pPool.concatPool(), "azairti");
 		
 	}
 	

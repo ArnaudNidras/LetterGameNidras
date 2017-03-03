@@ -41,9 +41,9 @@ public class Plays {
 					pPool.addElement(word);
         			for(int i = 0 ; i < word.length() ; i ++) cPool.removeElement(word.charAt(i));
         			cPool.addElement(player.drawLetter());
-        			gui.update();
         			
-    			
+        			return true;
+        			
 				}
 				else gui.setLogsLabel("Le mot est déjà en votre possession");
 				
@@ -70,8 +70,8 @@ public class Plays {
 						pPool.addElement(word);
 	        			for(int i = 0 ; i < word.length() ; i ++) cPool.removeElement(word.charAt(i));
 	        			cPool.addElement(player.drawLetter());
-	        			gui.update();
 	        			
+	        			return true;
 	    			
 					}
 					else gui.setLogsLabel("Le mot est déjà en votre possession");
@@ -84,8 +84,8 @@ public class Plays {
 						pPool2.addElement(word);
 	        			for(int i = 0 ; i < word.length() ; i ++) cPool.removeElement(word.charAt(i));
 	        			cPool.addElement(player.drawLetter());
-	        			gui.update();
 	        			
+	        			return true;
 	    			
 					}
 					else gui.setLogsLabel("Le mot est déjà en votre possession");
@@ -136,7 +136,6 @@ public class Plays {
 								pPool.addElement(words[1]);
 			        			for(int k = 0 ; k < words[1].replace(words[0], "").length() ; k ++) cPool.removeElement(words[1].replace(words[0], "").charAt(k));
 			        			cPool.addElement(player.drawLetter());
-			        			gui.update();
 			        			
 			        			return true;
 								
@@ -211,7 +210,6 @@ public class Plays {
 								pool1.addElement(words[1]);
 			        			for(int k = 0 ; k < words[1].replace(words[0], "").length() ; k ++) cPool.removeElement(words[1].replace(words[0], "").charAt(k));
 			        			cPool.addElement(player.drawLetter());
-			        			gui.update();
 			        			
 			        			return true;
 								
@@ -268,7 +266,6 @@ public class Plays {
 							pPool.removeElement(words[1]);
 							
 							cPool.addElement(player.drawLetter());
-		        			gui.update();
 		        			
 		        			return true;
 							
@@ -327,7 +324,6 @@ public class Plays {
 							pool.removeElement(words[1]);
 							
 							cPool.addElement(player.drawLetter());
-		        			gui.update();
 		        			
 		        			return true;
 							
@@ -411,7 +407,6 @@ public class Plays {
 							pPool.removeElement(words[0]);
 		        			for(int j = 0 ; j < temp.length() ; j ++) cPool.removeElement(temp.charAt(j));
 		        			cPool.addElement(player.drawLetter());
-		        			gui.update();
 		        			
 		        			return true;
 							
@@ -471,7 +466,6 @@ public class Plays {
 							pool.removeElement(words[0]);
 		        			for(int j = 0 ; j < temp.length() ; j ++) cPool.removeElement(temp.charAt(j));
 		        			cPool.addElement(player.drawLetter());
-		        			gui.update();
 		        			
 		        			return true;
 							
@@ -526,7 +520,6 @@ public class Plays {
 								iPool.removeElement(words[1]);
 								usedAnagrams.add(words[1]);
 								cPool.addElement(player.drawLetter());
-			        			gui.update();
 			        			
 			        			return true;
 								
@@ -537,7 +530,6 @@ public class Plays {
 								pPool.removeElement(words[1]);
 								usedAnagrams.add(words[1]);
 								cPool.addElement(player.drawLetter());
-			        			gui.update();
 			        			
 			        			return true;
 								
@@ -611,7 +603,6 @@ public class Plays {
 								pool2.removeElement(words[1]);
 								usedAnagrams.add(words[1]);
 								cPool.addElement(player.drawLetter());
-			        			gui.update();
 			        			
 			        			return true;
 								
@@ -622,7 +613,6 @@ public class Plays {
 								pool1.removeElement(words[1]);
 								usedAnagrams.add(words[1]);
 								cPool.addElement(player.drawLetter());
-			        			gui.update();
 			        			
 			        			return true;
 								
